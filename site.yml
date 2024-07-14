@@ -58,6 +58,30 @@
       state: latest      
     when: ansible_distribution == "CentOS"   
 
+  - name: start httpd (centos)
+    tags: apache,centos,httpd
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: change email address for admin
+    tags: apache,apache2,ubuntu
+    lineinfile:
+       path: /etc/apache2/sites-available/000-default.conf
+       regexp: '^ServerAdmin'
+       line: ServerAdmin somebody@somewhere.net
+    when: ansible_distribution == "Ubuntu"   
+    register: pizza
+
+  - name: restart httpd (ubuntu)
+    tags: apache,apache2,ubuntu
+    service:
+       name: apache2
+       state: restarted
+    when: pizza.changed    
+
   - name: copy default html file for site
     tags: apache,apache2,httpd
     copy:

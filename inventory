@@ -4,3 +4,5 @@ server1
 server2
 [file_servers]
 server3
+[workstations]
+server3
